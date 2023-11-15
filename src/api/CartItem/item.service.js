@@ -6,6 +6,7 @@ const prisma = require("../../utils/prisma.util")
 const CartNotFound = new Errors.NotFoundError("Cart not found.")
 const ProductNotFound = new Errors.NotFoundError("Product not found.")
 const ItemExists = new Errors.ConflictError("Item already exists on cart.")
+const ItemNotFound = new Errors.ConflictError("Item not found.")
 
 class ItemService {
 
@@ -51,7 +52,24 @@ class ItemService {
         return { results, pagination: page }
     }
 
+    static async update(id, data){
+        //Check if item exists
+        const item = await this.findById(id)
+        if(!item) throw ItemNotFound
 
+        const res = await prisma.cart_items.update({ where: { id }, data })
+        return res
+    }
+
+
+    static async findById(id){
+        const item = await prisma.cart_items.findUnique({
+            where: { id },
+            select: { id: true }
+        })
+
+        return item
+    }
 
     static async findByProductIdCartId(product_id, cart_id){
         const item = await prisma.cart_items.findUnique({

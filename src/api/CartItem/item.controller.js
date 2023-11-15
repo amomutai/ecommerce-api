@@ -32,6 +32,20 @@ class ItemController {
             }
         ]
     }
+
+    static update(){
+        return [
+            useValidater(schema.edit),
+            async(req, res, next)=>{
+                try {
+                    const result = await ItemService.update(req.params.id, req.body)
+                    res.status(200).send(result)
+                } catch (error) {
+                    next(error)
+                }
+            }
+        ]
+    }
 }
 
 module.exports = ItemController
