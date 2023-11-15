@@ -16,6 +16,20 @@ class CartController {
             }
         ]
     }
+
+    static delete(){
+        return [
+            useValidater(schema.delete),
+            async(req, res, next)=>{
+                try {
+                    const result = await CartService.delete(req.params.id)
+                    res.status(200).send(result)
+                } catch (error) {
+                    next(error)
+                }
+            }
+        ]
+    }
 }
 
 module.exports = CartController

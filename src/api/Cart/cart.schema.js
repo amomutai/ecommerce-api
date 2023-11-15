@@ -10,3 +10,11 @@ module.exports.add = object
     })
 })
 .unknown()
+
+module.exports.delete = object
+.keys({
+    params: object.keys({
+        id: string.uuid().required().label("id")
+    })
+})
+.unknown()
