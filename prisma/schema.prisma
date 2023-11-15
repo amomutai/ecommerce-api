@@ -22,14 +22,11 @@ model cart_items {
   quantity   Int      @default(1)
   created_at DateTime @default(now()) @db.Timestamp(6)
   cart       cart     @relation(fields: [cart_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model categories {
   id          String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   title       String     @unique @db.VarChar(255)
-  price       BigInt
-  available   Boolean    @default(true)
   description String?
   created_at  DateTime   @default(now()) @db.Timestamp(6)
   products    products[]
@@ -43,7 +40,6 @@ model order_items {
   quantity      Int      @default(1)
   created_at    DateTime @default(now()) @db.Timestamp(6)
   orders        orders   @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  products      products @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model orders {
@@ -60,20 +56,18 @@ model product_details {
   product_id String   @db.Uuid
   info       String
   created_at DateTime @default(now()) @db.Timestamp(6)
-  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model products {
-  id              String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  category_id     String            @db.Uuid
-  name            String            @unique @db.VarChar(255)
-  description     String?
-  image_url       String            @default("") @db.VarChar(255)
-  created_at      DateTime          @default(now()) @db.Timestamp(6)
-  cart_items      cart_items[]
-  order_items     order_items[]
-  product_details product_details[]
-  categories      categories        @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id          String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  category_id String     @db.Uuid
+  name        String     @unique @db.VarChar(255)
+  price       BigInt     @default(0)
+  available   Boolean    @default(true)
+  description String?
+  image_url   String     @default("") @db.VarChar(255)
+  created_at  DateTime   @default(now()) @db.Timestamp(6)
+  categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model users {
