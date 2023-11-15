@@ -12,3 +12,13 @@ module.exports.add = object
     })
 })
 .unknown()
+
+
+module.exports.read = object
+.keys({
+    query: paginationSchema().append({
+        cart_id: string.uuid().required().label("cart_id")
+        //Add allowed query params... Add any other query params here
+    })
+})
+.unknown()

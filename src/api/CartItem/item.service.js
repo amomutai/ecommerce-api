@@ -27,6 +27,31 @@ class ItemService {
         return res
 
     }
+    
+    static async getByCartId(cart_id, page){
+        //check if cart exists
+        const cart = await CartService.findById(cart_id)
+        if(!cart) throw CartNotFound
+
+        const { pageLimit, sortOrder, sortField, offset } = page
+
+        const results = await prisma.cart_items.findMany({
+            where: { cart_id },
+            take: pageLimit,
+            skip: offset,
+            orderBy: { [sortField]: sortOrder}
+        })
+        //Create a pagination object to sent with results
+        const count = await prisma.cart_items.count({ where: { cart_id } })
+        page.pageCount = Number(count) / Number(page.pageLimit)
+        if(page.pageCount < 1){
+            page.pageCount = 1
+        }
+        delete page.offset
+        return { results, pagination: page }
+    }
+
+
 
     static async findByProductIdCartId(product_id, cart_id){
         const item = await prisma.cart_items.findUnique({
