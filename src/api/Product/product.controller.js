@@ -32,6 +32,20 @@ class ProductController {
             }
         ]
     }
+
+    static update(){
+        return [
+            useValidater(schema.edit),
+            async(req, res, next)=>{
+                try {
+                    const result = await ProductService.update(req.params.id, req.body)
+                    res.status(200).send(result)
+                } catch (error) {
+                    next(error)
+                }
+            }
+        ]
+    }
 }
 
 module.exports = ProductController

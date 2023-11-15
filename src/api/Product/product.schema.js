@@ -22,3 +22,19 @@ module.exports.read = object
     })
 })
 .unknown()
+
+module.exports.edit = object
+.keys({
+    params: object.keys({
+        id: string.uuid().required().label("id")
+    }),
+    body: object.keys({
+        name: string.label("name"),
+        category_id: string.uuid().label("category_id"),
+        price: number.label("price"),
+        available: boolean.label("available"),
+        description: string.label("description"),
+        image_url: string.label("image_url"),
+    })
+})
+.unknown()
