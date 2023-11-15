@@ -47,6 +47,21 @@ class OrderController {
             }
         ]
     }
+
+    static getDetailsById (){
+        return [
+            useValidater(schema.getDetailsById),
+            usePagination(),
+            async(req, res, next) =>{
+                try {
+                    const result = await OrderService.getById(req.params.id)
+                    res.status(201).send(result)
+                } catch (error) {
+                    next(error)
+                }
+            }
+        ]
+    }
 }
 
 module.exports = OrderController

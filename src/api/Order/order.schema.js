@@ -19,6 +19,14 @@ module.exports.delete = object
 })
 .unknown()
 
+module.exports.getDetailsById = object
+.keys({
+    params: object.keys({
+        id: string.uuid().required().label("id")
+    })
+})
+.unknown()
+
 module.exports.getAllByUserId = object
 .keys({
     query: paginationSchema().append({

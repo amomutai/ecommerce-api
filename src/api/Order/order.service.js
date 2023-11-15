@@ -41,7 +41,7 @@ class OrderService {
             skip: offset,
             orderBy: { [sortField]: sortOrder}
         })
-        
+
         //Create a pagination object to sent with results
         const count = await prisma.orders.count({ where: { user_id } })
         page.pageCount = Number(count) / Number(page.pageLimit)
@@ -50,6 +50,17 @@ class OrderService {
         }
         delete page.offset
         return { results, pagination: page }
+    }
+
+    static async getById(id) {
+        const order = await prisma.orders.findUnique({
+            where: { id },
+            include: { 
+                order_items: true
+            }
+        })
+
+        return order
     }
 
     static async findById(id){

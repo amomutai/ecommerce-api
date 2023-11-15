@@ -2,6 +2,7 @@ const router = require("express").Router()
 const OrderController = require("./order.controller")
 
 router.route("/order").post(OrderController.add())
+router.route("/order/:id").get(OrderController.getDetailsById())
 router.route("/orders").get(OrderController.getByUserId())
 router.route("/order/:id").delete(OrderController.delete())
 
