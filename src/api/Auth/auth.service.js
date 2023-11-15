@@ -73,6 +73,14 @@ class AuthService {
         })
         return isPhone
     }
+
+    static async findById(id){
+        const user = await prisma.users.findUnique({
+            where: { id },
+            select: { id: true }
+        })
+        return user
+    }
 }
 
 module.exports = AuthService
