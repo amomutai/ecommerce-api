@@ -26,6 +26,9 @@ app
 
 const PORT = process.env.PORT || 5000
 
+//Serial Bigint
+BigInt.prototype.toJSON = function () {return this.toString()}
+
 //Custom logging. clg may not work on server env
 app.listen(PORT, ()=>logger.info(`API running on port ${PORT}`))
 
