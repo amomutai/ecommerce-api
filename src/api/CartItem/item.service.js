@@ -52,6 +52,15 @@ class ItemService {
         return { results, pagination: page }
     }
 
+    static async getAllByCartId(cart_id){
+        const results = await prisma.cart_items.findMany({
+            where: { cart_id },
+            include: { products: true }
+        })
+
+        return results
+    }
+
     static async update(id, data){
         //Check if item exists
         const item = await this.findById(id)

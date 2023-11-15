@@ -6,6 +6,7 @@ module.exports = class ErrorHandler {
         return [
             (err, req, res, next)=>{
                 try {
+                    console.log({ err })
                     const isError = !!(err.name&&Errors[err.name]&&err instanceof Errors[err.name])
                     if(isError) throw err
 
