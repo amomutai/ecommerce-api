@@ -21,7 +21,7 @@ app
         res.send("API assignment is available")
     })
     // .use(auth.authenticate)
-    // .use("/api", api)
+    .use("/api", api)
     .use(useErrorHandler());
 
 const PORT = process.env.PORT || 5000
