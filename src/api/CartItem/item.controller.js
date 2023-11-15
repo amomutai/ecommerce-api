@@ -46,6 +46,20 @@ class ItemController {
             }
         ]
     }
+
+    static delete(){
+        return [
+            useValidater(schema.delete),
+            async(req, res, next)=>{
+                try {
+                    const result = await ItemService.delete(req.params.id)
+                    res.status(200).send(result)
+                } catch (error) {
+                    next(error)
+                }
+            }
+        ]
+    }
 }
 
 module.exports = ItemController

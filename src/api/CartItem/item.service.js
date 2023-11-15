@@ -61,6 +61,18 @@ class ItemService {
         return res
     }
 
+    static async delete(id){
+       //Check if item exists
+       const item = await this.findById(id)
+       if(!item) throw ItemNotFound
+
+        const res = await prisma.cart_items.delete({ where: { id }})
+
+        return res
+    }
+
+
+
 
     static async findById(id){
         const item = await prisma.cart_items.findUnique({
