@@ -31,14 +31,43 @@ class ProductDetailsService {
         return res
     }
 
+    static async update(id, data){
+        //Check if product details exists
+        const isDetails = await this.findById(id)
+        if(!isDetails) throw ProductDetailsNotFound
+
+        const { product_id, info  } = data
+        //Check the product_id constraint if exists && if product exists
+        if(product_id){
+            //Check if product exists
+            const product = await ProductService.findById(product_id)
+            if(!product) throw ProductNotFound
+            //Check the product_id constraint if exists
+            const isProductDetails = await this.findByProductId(product_id)
+            if(isProductDetails) throw ProductDetailsExists
+        }
+
+        const res = await prisma.product_details.update({
+            where: { id },
+            data: { product_id, info }
+        })
+
+        return res
+    }
+
     static async findByProductId(product_id){
         const isDetails = await prisma.product_details.findUnique({ 
             where: { product_id }, 
             select: { id: true }
         }) 
-
         return isDetails
-
+    }
+    static async findById(id){
+        const isDetails = await prisma.product_details.findUnique({ 
+            where: { id }, 
+            select: { id: true }
+        }) 
+        return isDetails
     }
 }
 
