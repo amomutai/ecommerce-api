@@ -18,3 +18,15 @@ module.exports.read = object
     })
 })
 .unknown()
+
+module.exports.edit = object
+.keys({
+    params: object.keys({
+        id: string.uuid().required().label("id")
+    }),
+    body: object.keys({
+        title: string.label("title"),
+        description: string.label("description")
+    })
+})
+.unknown()

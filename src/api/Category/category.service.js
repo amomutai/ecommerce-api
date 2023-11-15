@@ -1,10 +1,18 @@
 const prisma = require("../../utils/prisma.util")
+const Errors = require("../../errors")
 
+const CategoryNotFound = new Errors.NotFoundError("Category to update not found");
+const CategoryTitleConflict = new Errors.ConflictError("Selected title already exists.")
 
 class CategoriesService {
 
     static async add (data){
         const { title, description } = data
+        
+        //Check title unique constraint
+        const titlePresent = await this.findByTitle(title)
+        if(titlePresent) throw CategoryTitleConflict
+
         const res = await prisma.categories.create({data:{ title, description }})
         return res
     }
@@ -25,6 +33,42 @@ class CategoriesService {
         }
         delete page.offset
         return { results, pagination: page }
+    }
+
+    static async update(id, data){
+        //Check if category exists first
+        const category = await this.findById(id)
+        if(!category) throw CategoryNotFound
+
+        const { title, description } = data
+        //If title, check unique constraint
+        if(title){
+            const titlePresent = await this.findByTitle(title)
+            if(titlePresent) throw CategoryTitleConflict
+        }
+
+        const res = await prisma.categories.update({
+            where: { id },
+            data: { title, description }
+        })
+        return res
+    }
+
+
+
+    static async findById(id){
+        const isFound = await prisma.categories.findUnique({
+            where:{id}, 
+            select:{id:true} //select id only to reduce query payload size
+        })
+        return isFound
+    }
+    static async findByTitle(title){
+        const isFound = await prisma.categories.findUnique({
+            where:{title}, 
+            select:{id:true} //select id only to reduce query payload size
+        })
+        return isFound
     }
 }
 
