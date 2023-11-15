@@ -4,6 +4,7 @@ const ProductService = require("../Product/product.service")
 
 const ProductDetailsExists = new Errors.ConflictError("Product already contains details.")
 const ProductNotFound = new Errors.NotFoundError("Selected product not found.")
+const ProductDetailsNotFound = new Errors.NotFoundError("Product details not found.")
 
 
 class ProductDetailsService {
@@ -18,8 +19,15 @@ class ProductDetailsService {
         //Check the product_id constraint if exists
         const isProductDetails = await this.findByProductId(product_id)
         if(isProductDetails) throw ProductDetailsExists
-        
+
         const res = await prisma.product_details.create({data:{ product_id, info }})
+        return res
+    }
+
+    static async getByProductId(product_id){
+        const res = await prisma.product_details.findUnique({ where: { product_id }})
+        if(!res) throw ProductDetailsNotFound
+
         return res
     }
 

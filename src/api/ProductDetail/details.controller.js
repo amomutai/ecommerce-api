@@ -16,6 +16,20 @@ class ProductDetailsController {
             }
         ]
     }
+
+    static getByProductId(){
+        return [
+            useValidater(schema.read),
+            async(req, res, next)=>{
+                try {
+                    const result = await ProductDetailsService.getByProductId(req.query.product_id)
+                    res.status(200).send(result)
+                } catch (error) {
+                    next(error)
+                }
+            }
+        ]
+    }
 }
 
 module.exports = ProductDetailsController

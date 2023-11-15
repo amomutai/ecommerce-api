@@ -9,3 +9,12 @@ module.exports.add = object
     })
 })
 .unknown()
+
+module.exports.read = object
+.keys({
+    query: object.keys({
+        //Add allowed query params... Add any other query params here
+        product_id: string.uuid().required().label("product_id")
+    })
+})
+.unknown()
