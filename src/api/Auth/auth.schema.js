@@ -20,3 +20,12 @@ module.exports.signup = object
     })
 })
 .unknown()
+
+module.exports.signin = object
+.keys({
+    body: object.keys({
+        email: string.email().required().label("email"),
+        password: string.required().label("password"),
+    })
+})
+.unknown()

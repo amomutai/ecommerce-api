@@ -18,6 +18,20 @@ class AuthController {
             }
         ]
     }
+
+    static signin(){
+        return [
+            useValidater(schema.signin),
+            async(req, res, next)=>{
+                try {
+                    const result = await AuthService.signin(req.body)
+                    res.status(201).send(result)
+                } catch (error) {
+                    next(error)
+                }
+            }
+        ]
+    }
 }
 
 module.exports = AuthController
