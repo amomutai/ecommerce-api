@@ -8,7 +8,7 @@ class CategoriesService {
 
     static async add (data){
         const { title, description } = data
-        
+
         //Check title unique constraint
         const titlePresent = await this.findByTitle(title)
         if(titlePresent) throw CategoryTitleConflict
@@ -51,6 +51,16 @@ class CategoriesService {
             where: { id },
             data: { title, description }
         })
+        return res
+    }
+
+    static async delete(id){
+        //Check if category exists first
+        const category = await this.findById(id)
+        if(!category) throw CategoryNotFound
+
+        const res = await prisma.categories.delete({ where: { id }})
+
         return res
     }
 
