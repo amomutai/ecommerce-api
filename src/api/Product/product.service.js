@@ -68,6 +68,16 @@ class ProductService{
         return res
     }
 
+    static async delete(id){
+        //Check if product exists first
+        const product = await this.findById(id)
+        if(!product) throw ProductNotFound
+
+        const res = await prisma.products.delete({ where: { id }})
+
+        return res
+    }
+
 
 
     static async findById(id){
