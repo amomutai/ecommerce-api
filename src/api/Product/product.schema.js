@@ -14,3 +14,11 @@ module.exports.add = object
     })
 })
 .unknown()
+
+module.exports.read = object
+.keys({
+    query: paginationSchema().append({
+        //Add allowed query params... Add any other query params here
+    })
+})
+.unknown()

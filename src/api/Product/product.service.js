@@ -25,6 +25,24 @@ class ProductService{
         return res
     }
 
+    static async getAll(page){
+        const { pageLimit, sortOrder, sortField, offset } = page
+
+        const results = await prisma.products.findMany({
+            take: pageLimit,
+            skip: offset,
+            orderBy: { [sortField]: sortOrder}
+        })
+        //Create a pagination object to sent with results
+        const count = await prisma.products.count()
+        page.pageCount = Number(count) / Number(page.pageLimit)
+        if(page.pageCount < 1){
+            page.pageCount = 1
+        }
+        delete page.offset
+        return { results, pagination: page }
+    }
+
 
     static async findByName(name){
         let prod = await prisma.products.findUnique({
