@@ -27,6 +27,31 @@ class OrderService {
         return res
     }
 
+    
+    static async getAllByUserId(user_id, page){
+        //Check if user exists
+        const userExists = await AuthService.findById(user_id)
+        if(!userExists) throw UserNotFound
+
+        const { pageLimit, sortOrder, sortField, offset } = page
+
+        const results = await prisma.orders.findMany({
+            where: { user_id },
+            take: pageLimit,
+            skip: offset,
+            orderBy: { [sortField]: sortOrder}
+        })
+        
+        //Create a pagination object to sent with results
+        const count = await prisma.orders.count({ where: { user_id } })
+        page.pageCount = Number(count) / Number(page.pageLimit)
+        if(page.pageCount < 1){
+            page.pageCount = 1
+        }
+        delete page.offset
+        return { results, pagination: page }
+    }
+
     static async findById(id){
         const order = await prisma.orders.findUnique({
             where: { id },

@@ -1,4 +1,4 @@
-const { useValidater } = require("../../config")
+const { useValidater, usePagination } = require("../../config")
 const schema = require("./order.schema")
 const OrderService = require("./order.service")
 
@@ -26,6 +26,21 @@ class OrderController {
                 try {
                     const result = await OrderService.delete(req.params.id)
                     res.status(200).send(result)
+                } catch (error) {
+                    next(error)
+                }
+            }
+        ]
+    }
+
+    static getByUserId (){
+        return [
+            useValidater(schema.getAllByUserId),
+            usePagination(),
+            async(req, res, next) =>{
+                try {
+                    const result = await OrderService.getAllByUserId(req.query.user_id, req.page)
+                    res.status(201).send(result)
                 } catch (error) {
                     next(error)
                 }

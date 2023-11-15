@@ -18,3 +18,12 @@ module.exports.delete = object
     })
 })
 .unknown()
+
+module.exports.getAllByUserId = object
+.keys({
+    query: paginationSchema().append({
+        user_id: string.uuid().required().label("user_id")
+        //Add allowed query params... Add any other query params here
+    })
+})
+.unknown()
